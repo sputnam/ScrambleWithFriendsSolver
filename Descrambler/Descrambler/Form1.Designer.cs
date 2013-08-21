@@ -44,7 +44,7 @@
       this.txtBox13 = new System.Windows.Forms.TextBox();
       this.txtBox23 = new System.Windows.Forms.TextBox();
       this.txtBox33 = new System.Windows.Forms.TextBox();
-      this.Button1 = new System.Windows.Forms.Button();
+      this.btnDescramble = new System.Windows.Forms.Button();
       this.listBox1 = new System.Windows.Forms.ListBox();
       this.btnRandomize = new System.Windows.Forms.Button();
       this.SuspendLayout();
@@ -161,15 +161,15 @@
       this.txtBox33.Size = new System.Drawing.Size(49, 20);
       this.txtBox33.TabIndex = 15;
       // 
-      // Button1
+      // btnDescramble
       // 
-      this.Button1.Location = new System.Drawing.Point(135, 212);
-      this.Button1.Name = "Button1";
-      this.Button1.Size = new System.Drawing.Size(75, 23);
-      this.Button1.TabIndex = 16;
-      this.Button1.Text = "Descramble";
-      this.Button1.UseVisualStyleBackColor = true;
-      this.Button1.Click += new System.EventHandler(this.Button1_Click);
+      this.btnDescramble.Location = new System.Drawing.Point(135, 212);
+      this.btnDescramble.Name = "btnDescramble";
+      this.btnDescramble.Size = new System.Drawing.Size(75, 23);
+      this.btnDescramble.TabIndex = 16;
+      this.btnDescramble.Text = "Descramble";
+      this.btnDescramble.UseVisualStyleBackColor = true;
+      this.btnDescramble.Click += new System.EventHandler(this.btnDescramble_Click);
       // 
       // listBox1
       // 
@@ -196,7 +196,7 @@
       this.ClientSize = new System.Drawing.Size(354, 453);
       this.Controls.Add(this.btnRandomize);
       this.Controls.Add(this.listBox1);
-      this.Controls.Add(this.Button1);
+      this.Controls.Add(this.btnDescramble);
       this.Controls.Add(this.txtBox33);
       this.Controls.Add(this.txtBox23);
       this.Controls.Add(this.txtBox13);
@@ -238,7 +238,7 @@
     private System.Windows.Forms.TextBox txtBox13;
     private System.Windows.Forms.TextBox txtBox23;
     private System.Windows.Forms.TextBox txtBox33;
-    private System.Windows.Forms.Button Button1;
+    private System.Windows.Forms.Button btnDescramble;
     private System.Windows.Forms.ListBox listBox1;
     private System.Windows.Forms.Button btnRandomize;
   }

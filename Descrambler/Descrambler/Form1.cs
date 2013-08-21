@@ -60,11 +60,9 @@ namespace Descrambler
       words = Resources.enable1.Split(new string[] { "\r\n" }, StringSplitOptions.None);
     }
 
-    private void Button1_Click(object sender, EventArgs e)
+    private void btnDescramble_Click(object sender, EventArgs e)
     {
-      Button1.Enabled = false;
-      Application.DoEvents();
-
+      EnableControls(false);
 
       for (int i = 0; i < 4; i++)
       {
@@ -104,7 +102,7 @@ namespace Descrambler
       stopwatch.Stop();
       Console.WriteLine("Time elapsed: " + stopwatch.Elapsed);
 
-      Button1.Enabled = true;
+      EnableControls(true);
     }
 
     /// <summary>
@@ -194,6 +192,21 @@ namespace Descrambler
           txtBoxes[i, j].Text = ((char)('a' + rand.Next(0, 26))).ToString();
         }
       }
+    }
+
+    /// <summary>
+    /// Convenience function to enable/disable controls that need to be changed in a batch.
+    /// </summary>
+    /// <param name="flag"></param>
+    public void EnableControls(bool flag)
+    {
+      btnDescramble.Enabled = flag;
+      btnRandomize.Enabled = flag; ;
+      foreach (TextBox txtBox in txtBoxes)
+      {
+        txtBox.Enabled = flag;
+      }
+      Application.DoEvents();
     }
   }
 }
