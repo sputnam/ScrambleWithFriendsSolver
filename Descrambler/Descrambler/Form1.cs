@@ -19,13 +19,45 @@ namespace Descrambler
     /// 2D array used to maintain letters entered into GUI.
     /// </summary>
     private string[,] letters = new string[4, 4];
-    private string[] words;   
+    /// <summary>
+    /// Data structure to hold the text boxes for easy access and looping.
+    /// </summary>
+    private TextBox[,] txtBoxes = new TextBox[4, 4];
+    /// <summary>
+    /// Dictionary of valid words gets parsed into here.
+    /// </summary>
+    private string[] words;
+    /// <summary>
+    /// Random # generator.  Used for choosing random letters.
+    /// </summary>
+    private Random rand = new Random();
 
     public Form1()
     {
       InitializeComponent();
+
+      txtBoxes[0, 0] = txtBox00;
+      txtBoxes[0, 1] = txtBox01;
+      txtBoxes[0, 2] = txtBox02;
+      txtBoxes[0, 3] = txtBox03;
+
+      txtBoxes[1, 0] = txtBox10;
+      txtBoxes[1, 1] = txtBox11;
+      txtBoxes[1, 2] = txtBox12;
+      txtBoxes[1, 3] = txtBox13;
+
+      txtBoxes[2, 0] = txtBox20;
+      txtBoxes[2, 1] = txtBox21;
+      txtBoxes[2, 2] = txtBox22;
+      txtBoxes[2, 3] = txtBox23;
+
+      txtBoxes[3, 0] = txtBox30;
+      txtBoxes[3, 1] = txtBox31;
+      txtBoxes[3, 2] = txtBox32;
+      txtBoxes[3, 3] = txtBox33;
+
       // Parse out dictionary of valid words
-      words = Resources.enable1.Split(new string[] { "\r\n" }, StringSplitOptions.None);    
+      words = Resources.enable1.Split(new string[] { "\r\n" }, StringSplitOptions.None);
     }
 
     private void Button1_Click(object sender, EventArgs e)
@@ -33,26 +65,14 @@ namespace Descrambler
       Button1.Enabled = false;
       Application.DoEvents();
 
-      // Read input into 2D array
-      letters[0,0] = txtBox00.Text;
-      letters[0,1] = txtBox01.Text;
-      letters[0,2] = txtBox02.Text;
-      letters[0,3] = txtBox03.Text;
-      
-      letters[1,0] = txtBox10.Text;
-      letters[1,1] = txtBox11.Text;
-      letters[1,2] = txtBox12.Text;
-      letters[1,3] = txtBox13.Text;
-      
-      letters[2,0] = txtBox20.Text;
-      letters[2,1] = txtBox21.Text;
-      letters[2,2] = txtBox22.Text;
-      letters[2,3] = txtBox23.Text;
-      
-      letters[3,0] = txtBox30.Text;
-      letters[3,1] = txtBox31.Text;
-      letters[3,2] = txtBox32.Text;
-      letters[3,3] = txtBox33.Text;
+
+      for (int i = 0; i < 4; i++)
+      {
+        for (int j = 0; j < 4; j++)
+        {
+          letters[i, j] = txtBoxes[i, j].Text;
+        }
+      }
 
       // Clear out any old results
       listBox1.Items.Clear();
@@ -132,7 +152,7 @@ namespace Descrambler
           Application.DoEvents();
         }
 
-       if (dictionaryWord.StartsWith(word))
+        if (dictionaryWord.StartsWith(word))
           startsWithWord = true;
       }
 
@@ -163,6 +183,17 @@ namespace Descrambler
       buildWord(new List<Tile>(tiles), row + 1, col - 1);
       buildWord(new List<Tile>(tiles), row + 1, col);
       buildWord(new List<Tile>(tiles), row + 1, col + 1);
+    }
+
+    private void btnRandomize_Click(object sender, EventArgs e)
+    {
+      for (int i = 0; i < 4; i++)
+      {
+        for (int j = 0; j < 4; j++)
+        {
+          txtBoxes[i, j].Text = ((char)('a' + rand.Next(0, 26))).ToString();
+        }
+      }
     }
   }
 }

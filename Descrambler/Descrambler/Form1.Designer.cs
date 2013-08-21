@@ -46,6 +46,7 @@
       this.txtBox33 = new System.Windows.Forms.TextBox();
       this.Button1 = new System.Windows.Forms.Button();
       this.listBox1 = new System.Windows.Forms.ListBox();
+      this.btnRandomize = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // txtBox00
@@ -162,7 +163,7 @@
       // 
       // Button1
       // 
-      this.Button1.Location = new System.Drawing.Point(136, 249);
+      this.Button1.Location = new System.Drawing.Point(135, 212);
       this.Button1.Name = "Button1";
       this.Button1.Size = new System.Drawing.Size(75, 23);
       this.Button1.TabIndex = 16;
@@ -178,11 +179,22 @@
       this.listBox1.Size = new System.Drawing.Size(330, 147);
       this.listBox1.TabIndex = 17;
       // 
+      // btnRandomize
+      // 
+      this.btnRandomize.Location = new System.Drawing.Point(135, 244);
+      this.btnRandomize.Name = "btnRandomize";
+      this.btnRandomize.Size = new System.Drawing.Size(75, 23);
+      this.btnRandomize.TabIndex = 18;
+      this.btnRandomize.Text = "Randomize";
+      this.btnRandomize.UseVisualStyleBackColor = true;
+      this.btnRandomize.Click += new System.EventHandler(this.btnRandomize_Click);
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(354, 453);
+      this.Controls.Add(this.btnRandomize);
       this.Controls.Add(this.listBox1);
       this.Controls.Add(this.Button1);
       this.Controls.Add(this.txtBox33);
@@ -228,6 +240,7 @@
     private System.Windows.Forms.TextBox txtBox33;
     private System.Windows.Forms.Button Button1;
     private System.Windows.Forms.ListBox listBox1;
+    private System.Windows.Forms.Button btnRandomize;
   }
 }
 
