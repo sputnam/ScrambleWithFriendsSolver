@@ -10,6 +10,8 @@ using System.IO;
 using System.Resources;
 using Descrambler.Properties;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Descrambler
 {
@@ -31,6 +33,18 @@ namespace Descrambler
     /// Random # generator.  Used for choosing random letters.
     /// </summary>
     private Random rand = new Random();
+    /// <summary>
+    /// Found answers are stored here.
+    /// </summary>
+    List<string> answers = new List<string>();
+    /// <summary>
+    /// This contains valid words in a hash table
+    /// </summary>
+    Dictionary<string, string> validWords = new Dictionary<string, string>();
+    /// <summary>
+    /// This contrains valid word starts in a hash table.  This can be used to prune the recursive tree.
+    /// </summary>
+    Dictionary<string, string> wordStarts = new Dictionary<string, string>();
 
     public Form1()
     {
@@ -58,6 +72,19 @@ namespace Descrambler
 
       // Parse out dictionary of valid words
       words = Resources.enable1.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+      foreach (string word in words)
+      {
+        validWords.Add(word, word);
+
+        for (int i = 0; i < word.Length - 2; i++)
+        {
+          string sub = word.Substring(0, i + 1);
+          if (!wordStarts.ContainsKey(sub))
+          {
+            wordStarts.Add(sub, sub);
+          }
+        }
+      }
     }
 
     private void btnDescramble_Click(object sender, EventArgs e)
@@ -73,34 +100,24 @@ namespace Descrambler
       }
 
       // Clear out any old results
+      answers.Clear();
       listBox1.Items.Clear();
 
       Stopwatch stopwatch = new Stopwatch();
       stopwatch.Start();
 
       // Recursively build words starting from each of the 16 locations on the grid.
-      buildWord(new List<Tile>(), 0, 0);
-      buildWord(new List<Tile>(), 0, 1);
-      buildWord(new List<Tile>(), 0, 2);
-      buildWord(new List<Tile>(), 0, 3);
-
-      buildWord(new List<Tile>(), 1, 0);
-      buildWord(new List<Tile>(), 1, 1);
-      buildWord(new List<Tile>(), 1, 2);
-      buildWord(new List<Tile>(), 1, 3);
-
-      buildWord(new List<Tile>(), 2, 0);
-      buildWord(new List<Tile>(), 2, 1);
-      buildWord(new List<Tile>(), 2, 2);
-      buildWord(new List<Tile>(), 2, 3);
-
-      buildWord(new List<Tile>(), 3, 0);
-      buildWord(new List<Tile>(), 3, 1);
-      buildWord(new List<Tile>(), 3, 2);
-      buildWord(new List<Tile>(), 3, 3);
+      Parallel.For(0, 4, i =>
+      {
+        for (int j = 0; j < 4; j++)
+        {
+          buildWord(new List<Tile>(), i, j);
+        }
+      });
 
       stopwatch.Stop();
       Console.WriteLine("Time elapsed: " + stopwatch.Elapsed);
+      listBox1.Items.AddRange(answers.ToArray());
 
       EnableControls(true);
     }
@@ -139,34 +156,14 @@ namespace Descrambler
         word += tile.letter;
 
       System.Console.WriteLine(word + " " + row + " " + col);
-
-      bool startsWithWord = false;
-      foreach (string dictionaryWord in words)
-      {
-        if (word == dictionaryWord)
-        {
-          // This is a valid word, so add it to our results
-          listBox1.Items.Add(word);
-          Application.DoEvents();
-        }
-
-        if (dictionaryWord.StartsWith(word))
-          startsWithWord = true;
-      }
+      if (validWords.ContainsKey(word))
+        answers.Add(word);
+    
 
       // If no possible words even begin with this current combination of letters, we can prune this 
       // branch of our recursive tree because we will not find any more valid results down this branch.
-      if (!startsWithWord)
+      if (!wordStarts.ContainsKey(word))
         return;
-
-      List<int> rowList = new List<int>();
-      rowList.Add(row - 1);
-      rowList.Add(row);
-      rowList.Add(row + 1);
-      List<int> colList = new List<int>();
-      colList.Add(col - 1);
-      colList.Add(col);
-      colList.Add(col + 1);
 
       // Call with possible location one row above current location
       buildWord(new List<Tile>(tiles), row - 1, col - 1);
@@ -189,7 +186,7 @@ namespace Descrambler
       {
         for (int j = 0; j < 4; j++)
         {
-          txtBoxes[i, j].Text = ((char)('a' + rand.Next(0, 26))).ToString();
+          txtBoxes[i,j].Text = ((char)('a' + rand.Next(0, 26))).ToString();
         }
       }
     }
@@ -201,11 +198,9 @@ namespace Descrambler
     public void EnableControls(bool flag)
     {
       btnDescramble.Enabled = flag;
-      btnRandomize.Enabled = flag; ;
+      btnRandomize.Enabled = flag;
       foreach (TextBox txtBox in txtBoxes)
-      {
         txtBox.Enabled = flag;
-      }
       Application.DoEvents();
     }
   }
